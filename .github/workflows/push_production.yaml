@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out own repor
+      - name: Check out own repo
         uses: actions/checkout@v3
 
       - name: Check out third-party repository

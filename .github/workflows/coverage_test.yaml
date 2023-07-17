@@ -9,6 +9,9 @@ jobs:
 
     steps:
 
+      - name: Check out own repo
+        uses: actions/checkout@v3
+
       - name: Run Coverage Test
         run: |
           docker build -t unittest-py -f Dockerfile_coverage .

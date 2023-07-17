@@ -13,18 +13,18 @@ jobs:
         with:
           repository: bmaluff/coding-game
           workflow: Unit Test
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Trigger Coverage Test
         uses: peter-evans/repository-dispatch@v1
         with:
           repository: bmaluff/coding-game
           workflow: Coverage Test
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Trigger Push Docker
         uses: peter-evans/repository-dispatch@v1
         with:
           repository: bmaluff/coding-game
           workflow: Push Docker image
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
