@@ -38,5 +38,5 @@ jobs:
         with:
           context: .
           push: true
-          file: "{context}/Dockerfile_production"
+          file: "Dockerfile_production"
           tags: ${{ env.THIRD_PARTY_REPO_URL }}
