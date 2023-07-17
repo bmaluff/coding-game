@@ -2,6 +2,16 @@ name: Main Workflow
 
 on:
   workflow_dispatch:
+    inputs:
+      remote_repo_url:
+        description: 'Third-party Docker Registry URL'
+        required: true
+      docker_user:
+        description: 'Docker Username'
+        required: true
+      docker_token:
+        description: 'Docker Password'
+        required: true
 
 jobs:
   unit-test:
@@ -12,6 +22,10 @@ jobs:
 
   push-production:
     uses: ./.github/workflows/push_production.yaml
+    with:
+      remote_repo_url: ${{ github.event.inputs.remote_repo_url }}
+      docker_user: ${{ github.event.inputs.docker_user }}
+      docker_token: ${{ github.event.inputs.docker_token }}
   # trigger_workflow:
   #   runs-on: ubuntu-latest
 
