@@ -2,6 +2,8 @@ name: Coverage Test
 
 on:
   workflow_dispatch:
+  workflow_call:
+
     
 jobs:
   build_and_push_image:

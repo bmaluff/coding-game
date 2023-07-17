@@ -17,6 +17,20 @@ on:
       docker_token:
         description: 'Docker Password'
         required: true
+  workflow_call:
+    inputs:
+      remote_repo_url:
+        description: 'Third-party Docker Registry URL'
+        required: true
+        type: string
+      docker_user:
+        description: 'Docker Username'
+        required: true
+        type: string
+      docker_token:
+        description: 'Docker Password'
+        required: true
+        type: string
 
 jobs:
   build_and_push_image:
