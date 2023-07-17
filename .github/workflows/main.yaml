@@ -4,8 +4,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  call-workflow-2-in-local-repo:
+  unit-test:
     uses: ./.github/workflows/unit_test.yaml
+  
+  coverage-test:
+    uses: ./.github/workflows/coverage_test.yaml
   # trigger_workflow:
   #   runs-on: ubuntu-latest
 
