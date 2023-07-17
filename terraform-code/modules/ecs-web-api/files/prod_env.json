@@ -1,0 +1,12 @@
+{
+  "IS_DEBUG": "true",
+  "CORS_HOSTNAME": "https://core-test.mytle.com|http://localhost:3000",
+  "CORE_DB_USERNAME": "app_user1",
+  "CORE_DB_PASSWORD": "d$Had0u|<3N!4a4A?",
+  "CORE_DB_DATABASE": "core_23_0410",
+  "CORE_DB_HOSTNAME": "dev-tle-serverless-new-clone-5-7-cluster.cluster-cs3l5x94adrt.us-east-1.rds.amazonaws.com",
+  "CORE_DB_READ1_HOSTNAME": "dev-tle-serverless-new-clone-5-7-cluster.cluster-ro-cs3l5x94adrt.us-east-1.rds.amazonaws.com",
+  "CORE_DB_READ2_HOSTNAME": "dev-tle-serverless-new-clone-5-7-cluster.cluster-ro-cs3l5x94adrt.us-east-1.rds.amazonaws.com",
+  "CORE_DB_WRITE_HOSTNAME": "dev-tle-serverless-new-clone-5-7-cluster.cluster-cs3l5x94adrt.us-east-1.rds.amazonaws.com",
+  "PAGERDUTY": "-nYuL7yYXejE_Q8gPPv1"
+}

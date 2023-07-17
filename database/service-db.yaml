@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cg-db
+  labels:
+    app: cg-db
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+  selector:
+    app: cg-db

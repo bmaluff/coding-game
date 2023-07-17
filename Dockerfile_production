@@ -1,0 +1,14 @@
+FROM python:3.12.0b4-slim-bullseye
+ENV APP_HOME=/app
+ENV APP_USER=condingame
+RUN groupadd -r $APP_USER && \
+    useradd -r -g $APP_USER -d $APP_HOME -s /sbin/nologin -c "Docker image user" $APP_USER
+WORKDIR $APP_HOME
+RUN apt-get update && apt-get install -y git build-essential libpq-dev && rm -rf /var/lib/apt/lists/*
+RUN git clone https://bitbucket.org/devsu/demo-devops-python.git .
+COPY ./settings.py ${APP_HOME}/demo/
+COPY ./requirements2.txt ${APP_HOME}/
+RUN pip3 install -r requirements.txt -r requirements2.txt
+RUN chown -R $APP_USER:$APP_USER $APP_HOME
+USER $APP_USER
+ENTRYPOINT gunicorn -w 2 --bind=0.0.0.0 demo.wsgi

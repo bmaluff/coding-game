@@ -1,0 +1,11 @@
+FROM python:3.12.0b4-slim-bullseye
+ENV APP_HOME=/app
+WORKDIR $APP_HOME
+RUN apt update && apt install git -y
+RUN git clone https://bitbucket.org/devsu/demo-devops-python.git .
+RUN pip3 install -r requirements.txt
+RUN python3 -m pip install coverage
+RUN python3 manage.py makemigrations
+RUN python3 manage.py migrate
+RUN coverage run --source='.' manage.py test
+ENTRYPOINT coverage report

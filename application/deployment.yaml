@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    name: app
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: app
+  template:
+    metadata:
+      labels:
+        name: app
+    spec:
+      initContainers:
+        - name: collectstatic
+          image: cg-prod-1
+          imagePullPolicy: Never
+          command: ["python3", "manage.py", "collectstatic", "--noinput"]
+          envFrom:
+            - configMapRef:
+                name: app-config
+          volumeMounts:
+            - name: staticfiles
+              mountPath: /app/static
+              readOnly: false 
+        - name: dbmigrations
+          image: cg-prod-1
+          imagePullPolicy: Never
+          command: ["sh", "/app/scripts/migrations.sh"]
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secrets
+          volumeMounts:
+            - name: db-migrations
+              mountPath: /app/scripts/
+
+      containers:
+      - name: cg-prod-app
+        image: cg-prod-1
+        imagePullPolicy: Never
+        ports:
+          - containerPort: 8000
+            protocol: TCP
+        envFrom:
+          - secretRef:
+              name: app-secrets
+          - configMapRef:
+              name: app-config
+        volumeMounts:
+          - name: staticfiles
+            mountPath: /app/static/ ## where it wants to have the emptyDir mounted
+            readOnly: false
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            port: 8000
+            path: /api
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      - name: nginx
+        image: nginx
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 80
+            protocol: TCP
+        volumeMounts:
+          - name: nginx-conf
+            mountPath: /etc/nginx/conf.d
+            readOnly: true
+          - name: staticfiles
+            mountPath: /static/
+            readOnly: true
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-config
+        - name: app-env
+          configMap:
+            name: app-env
+        - name: django-settings
+          configMap:
+            name: django-settings
+        - name: db-migrations
+          configMap:
+            name: migrations
+        - name: staticfiles
+          emptyDir: {} ## we do not supply any further requirements for the emptyDir

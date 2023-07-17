@@ -1,0 +1,21 @@
+name: Coverage Test 
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  build_and_push_image:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Run Coverage Test
+        run: |
+          docker build -t unittest-py -f Dockerfile_coverage .
+          docker -it run unittest-py:latest > coverage.txt
+
+      - name: Upload Docker image artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Docker Image
+          path: coverage.txt

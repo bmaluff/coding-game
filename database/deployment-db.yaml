@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cg-db
+spec:
+  serviceName: cg-db-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cg-db
+  template:
+    metadata:
+      labels:
+        app: cg-db
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: cg-db
+          image: postgres
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: database
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: password
+            - name: PGDATA
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: pgdata
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+            - name: db-secrets
+              mountPath: "/etc/db-secrets"
+              readOnly: true
+      volumes:
+        - name: db-secrets
+          secret:
+            secretName: db-secrets
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "standard"
+      resources:
+        requests:
+          storage: 100M

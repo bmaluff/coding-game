@@ -1,0 +1,5 @@
+#!/bin/bash
+cat <<'EOF' >> /etc/ecs/ecs.config
+ECS_CLUSTER=${ECS_CLUSTER_NAME}
+ECS_WARM_POOLS_CHECK=true
+EOF

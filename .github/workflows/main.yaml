@@ -1,0 +1,32 @@
+name: Main Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger_workflow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Unit Test
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          repository: bmaluff/coding-game
+          workflow: Unit Test
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trigger Coverage Test
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          repository: bmaluff/coding-game
+          workflow: Coverage Test
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trigger Push Docker
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          repository: bmaluff/coding-game
+          workflow: Push Docker image
+          token: ${{ secrets.GITHUB_TOKEN }}
