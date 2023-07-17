@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Check out third-party repository
         run: |
-          git clone ${{ CG_REPO }} .
+          git clone ${{ env.CG_REPO }} .
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
