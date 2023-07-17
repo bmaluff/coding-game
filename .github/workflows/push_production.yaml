@@ -1,6 +1,6 @@
 name: Push Docker image
 env:
-  CG-REPO: 'https://bmaluff_23@bitbucket.org/devsu/demo-devops-python.git'
+  CG_REPO: 'https://bmaluff_23@bitbucket.org/devsu/demo-devops-python.git'
   THIRD_PARTY_REPO_URL: ${{ github.event.inputs.remote_repo_url }}
   DOCKERHUB_USERNAME: ${{ github.event.inputs.docker_user }}
   DOCKERHUB_TOKEN: ${{ github.event.inputs.docker_token }}
@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Check out third-party repository
         run: |
-          git clone $CG-REPO .
+          git clone ${{ CG_REPO }} .
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
