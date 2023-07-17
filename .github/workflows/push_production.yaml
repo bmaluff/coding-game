@@ -1,4 +1,4 @@
-name: Push Docker image
+name: Push Production Version
 env:
   CG_REPO: 'https://bmaluff_23@bitbucket.org/devsu/demo-devops-python.git'
   THIRD_PARTY_REPO_URL: ${{ github.event.inputs.remote_repo_url }}
