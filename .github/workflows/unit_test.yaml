@@ -19,5 +19,5 @@ jobs:
       - name: Upload Docker image artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: Docker Image
+          name: Unit Tests Results
           path: unittest.txt

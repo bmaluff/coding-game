@@ -20,5 +20,5 @@ jobs:
       - name: Upload Docker image artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: Docker Image
+          name: Coverage Results
           path: coverage.txt
