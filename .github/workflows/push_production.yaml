@@ -23,6 +23,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check out own repor
+        uses: actions/checkout@v3
+        
       - name: Check out third-party repository
         run: |
           git clone ${{ env.CG_REPO }} .
