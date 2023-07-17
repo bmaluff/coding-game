@@ -1,5 +1,4 @@
 # Conding Game
-##############
 
 El siguiente ejemplo fue un desafio provisto por Coding Game
 
