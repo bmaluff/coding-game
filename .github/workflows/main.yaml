@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  unit_test:
+  call-workflow-2-in-local-repo:
     uses: ./.github/workflows/unit_test.yaml
   # trigger_workflow:
   #   runs-on: ubuntu-latest
