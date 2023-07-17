@@ -15,7 +15,7 @@ jobs:
       - name: Run Coverage Test
         run: |
           docker build -t unittest-py -f Dockerfile_coverage .
-          docker run -it unittest-py:latest > coverage.txt
+          docker run -t unittest-py:latest > coverage.txt
 
       - name: Upload Docker image artifacts
         uses: actions/upload-artifact@v2
