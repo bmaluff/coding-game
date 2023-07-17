@@ -35,7 +35,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t ${{ env.THIRD_PARTY_REPO_URL }} -f Dockerfile_production" .
+          docker build -t ${{ env.THIRD_PARTY_REPO_URL }} -f Dockerfile_production .
           docker push ${{ env.THIRD_PARTY_REPO_URL }}
         # uses: docker/build-push-action@v4
         # with:
