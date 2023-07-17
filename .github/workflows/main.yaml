@@ -9,6 +9,9 @@ jobs:
   
   coverage-test:
     uses: ./.github/workflows/coverage_test.yaml
+
+  push-production:
+    uses: ./.github/workflows/push_production.yaml
   # trigger_workflow:
   #   runs-on: ubuntu-latest
 
