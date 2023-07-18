@@ -72,8 +72,11 @@ spec:
         imagePullPolicy: Always
         ports:
           - containerPort: 80
-            protocol: TCP
+          - containerPort: 443
         volumeMounts:
+          - name: nginx-certs
+            mountPath: /etc/nginx/ssl
+            readOnly: true
           - name: nginx-conf
             mountPath: /etc/nginx/conf.d
             readOnly: true
@@ -81,6 +84,9 @@ spec:
             mountPath: /static/
             readOnly: true
       volumes:
+        - name: nginx-certs
+          secret:
+            secretName: server
         - name: nginx-conf
           configMap:
             name: nginx-config
