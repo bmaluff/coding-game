@@ -15,7 +15,7 @@ terraform plan -target=module.data_layer -var="docker_image_url=$DOCKER_IMAGE_UR
 DB_HOST=$(terraform output -raw db_host)
 DB_PORT=$(terraform output -raw db_port)
 
-DB_PASS=$(aws secretsmanager get-secret-value --secret-id $(terraform output -raw secrets_arn) | jq '.SecretString' | fromjson | jq -r .password)
+DB_PASS=$(aws secretsmanager get-secret-value --secret-id $(terraform output -raw secrets_arn) | jq '.SecretString' | fromjson | jq -r .password --region us-east-1)
 ENV_FILE="./modules/ecs-web-api/files/prod_env.json"
 sed -i "s/CHANGE_USER/$DB_USER/" $ENV_FILE
 sed -i  "s/CHANGE_PASS/$DB_PASS/" $ENV_FILE
