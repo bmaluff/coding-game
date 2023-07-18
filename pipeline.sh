@@ -28,5 +28,5 @@ kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 echo "Esperando que el pod se levante..."
 sleep 10s
-echo "Todo Listo!! Puedes acceder a la api desde tu navegador: https://localhost:8443/api"
-kubectl port-forward service/app-service 8443:443
+echo "Todo Listo!! Puedes acceder a la api desde tu navegador: https://localhost:9443/api"
+kubectl port-forward service/app-service 9443:443
