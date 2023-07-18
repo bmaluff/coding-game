@@ -68,3 +68,14 @@ variable "prod_containerport" {
   default     = 8000
   description = "default app port"
 }
+
+################################ RDS ################################
+variable "db_instance_name" {
+  type = string
+  default = "coding-game"
+}
+
+variable "db_username" {
+  type = string
+  default = "coding-game"
+}

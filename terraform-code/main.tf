@@ -1,6 +1,5 @@
 locals {
   prod_env = "${var.main_product_name}-prod"
-
 }
 
 module "network_layer" {
@@ -8,13 +7,63 @@ module "network_layer" {
   name              = "test-bader"
   cidr = "10.10.0.0/16"
   azs             = ["${var.active_aws_region}a", "${var.active_aws_region}b"]
-  private_subnets = ["10.10.1.0/24", "10.10.2.0/24"]
+  private_subnets = ["10.10.1.0/24", "10.10.2.0/24", "10.10.3.0/28", "10.10.3.16/28"]
   public_subnets  = ["10.10.10.0/24", "10.10.20.0/24"]
   enable_nat_gateway = true
   enable_dns_hostnames = true
   tags = {
     Terraform = "true"
     Environment = "production"
+  }
+}
+
+module "data_layer_utils" {
+  source = "./modules/db_utils"
+  subnet_group_name = "${local.prod_env}-subnet-group"
+  private_subnets = slice(module.network_layer.private_subnets, 2, 4)
+  db_subnet_tags = {
+    Name="${local.prod_env}"
+  }
+  rds_sg_name = "${local.prod_env}-rds-sg"
+  sg_privates = slice(module.network_layer.private_subnets, 0, 2)
+  sg_tags = {
+    Name="${local.prod_env}-rds-sg"
+  }
+  vpc_id = module.network_layer.vpc_id
+}
+module "data_layer" {
+  source = "terraform-aws-modules/rds/aws"
+
+  identifier                     = "${local.prod_env}"
+  instance_use_identifier_prefix = true
+
+  create_db_option_group    = false
+  create_db_parameter_group = false
+
+  engine               = "postgres"
+  engine_version       = "14"
+  family               = "postgres14" 
+  major_engine_version = "14"         
+  instance_class       = "db.t3.micro"
+
+  allocated_storage = 2
+
+  # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
+  # "Error creating DB Instance: InvalidParameterValue: MasterUsername
+  # user cannot be used as it is a reserved word used by the engine"
+  db_name  = var.db_instance_name
+  username = var.db_username
+  port     = 5432
+
+  db_subnet_group_name   = module.data_layer_utils.db_subnet_group_name
+  vpc_security_group_ids = [module.data_layer_utils.sg_ids]
+
+  maintenance_window      = "Mon:00:00-Mon:03:00"
+  backup_window           = "03:00-06:00"
+  backup_retention_period = 0
+
+  tags = {
+    Name       = local.prod_env
   }
 }
 
