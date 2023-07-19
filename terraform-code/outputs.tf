@@ -25,3 +25,7 @@ output "db_port" {
 output "secrets_arn" {
   value = module.data_layer.db_instance_master_user_secret_arn
 }
+
+output "db_host_shorten" {
+  value = module.ecs_web_api.db_host_shorten
+}

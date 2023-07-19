@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "prod_ecs_task_def" {
         }
       ]
       healthCheck = {
-        command = [ "CMD-SHELL", "curl -f http://localhost:${var.prod_task_def_containerport}${var.prod_ecs_alb_targ_health_check_path} || exit 1" ]
+        command = [ "CMD-SHELL", "python3 manage.py check  || exit 1" ]
         startPeriod = 10
         interval = 30
         retries = 3
@@ -47,9 +47,33 @@ resource "aws_ecs_task_definition" "prod_ecs_task_def" {
       volumesFrom = []
       secrets = [
         {
-          name = "SECRET_EVS"
-          valueFrom = "${aws_secretsmanager_secret_version.prod_env.arn}"
-        }
+          name = "DEBUG"
+          valueFrom = "${aws_secretsmanager_secret_version.prod_env.arn}:DEBUG::"
+        },
+        {
+          name = "DB_NAME"
+          valueFrom = "${aws_secretsmanager_secret_version.prod_env.arn}:DB_NAME::"
+        },
+        {
+          name = "DB_HOST"
+          valueFrom = "${aws_secretsmanager_secret_version.prod_env.arn}:DB_HOST::"
+        },
+        {
+          name = "DB_PORT"
+          valueFrom = "${aws_secretsmanager_secret_version.prod_env.arn}:DB_PORT::"
+        },
+        {
+          name = "DB_USER"
+          valueFrom = "${aws_secretsmanager_secret_version.prod_env.arn}:DB_USER::"
+        },
+        {
+          name = "DB_PASS"
+          valueFrom = "${aws_secretsmanager_secret_version.prod_env.arn}:DB_PASS::"
+        },
+        {
+          name = "DJANGO_SECRET_KEY"
+          valueFrom = "${aws_secretsmanager_secret_version.prod_env.arn}:DJANGO_SECRET_KEY::"
+        },
       ]
     }
   ])
@@ -92,8 +116,8 @@ resource "aws_ecs_service" "prod_ecs_service" {
 }
 
 resource "aws_appautoscaling_target" "prod_ecs_service_autoscaling" {
-  max_capacity       = 10
-  min_capacity       = 2
+  max_capacity       = 2
+  min_capacity       = 1
   resource_id        = format("service/%s/%s", aws_ecs_cluster.prod_ecs_cluster.name, aws_ecs_service.prod_ecs_service.name)
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"

@@ -28,8 +28,8 @@ resource "aws_autoscaling_group" "prod_ecs_asg" {
   # ... other configuration, including potentially other tags ...
   name                  = var.prod_ecs_asg_name
   min_size              = 0
-  max_size              = 5
-  desired_capacity      = 3
+  max_size              = 2
+  desired_capacity      = 1
   vpc_zone_identifier   = var.prod_ecs_asg_vpc_zone_identifiers
   protect_from_scale_in = true
   health_check_grace_period = 120
@@ -37,7 +37,7 @@ resource "aws_autoscaling_group" "prod_ecs_asg" {
   warm_pool {
     pool_state                  = "Stopped"
     min_size                    = 1
-    max_group_prepared_capacity = 3
+    max_group_prepared_capacity = 2
   }
   launch_template {
     id      = aws_launch_template.prod_ecs_launch_template.id

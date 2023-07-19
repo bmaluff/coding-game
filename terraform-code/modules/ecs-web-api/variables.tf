@@ -175,3 +175,15 @@ variable "prod_ecs_sg_tags" {
 variable "prod_env_secret_name" {
   type = string
 }
+
+variable "vpc_id_route53" {
+ type = string 
+}
+
+variable "db_records" {
+  type = list(string)
+}
+
+variable "private_zone_name" {
+  type = string
+}

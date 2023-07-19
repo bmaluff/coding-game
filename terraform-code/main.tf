@@ -25,7 +25,7 @@ module "data_layer_utils" {
     Name="${local.prod_env}"
   }
   rds_sg_name = "${local.prod_env}-rds-sg"
-  sg_privates = slice(module.network_layer.private_subnets, 0, 2)
+  sg_privates = [module.ecs_web_api.sg_app_layer]
   sg_tags = {
     Name="${local.prod_env}-rds-sg"
   }
@@ -46,7 +46,7 @@ module "data_layer" {
   major_engine_version = "14"         
   instance_class       = "db.t3.micro"
 
-  allocated_storage = 2
+  allocated_storage = 5
 
   # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
   # "Error creating DB Instance: InvalidParameterValue: MasterUsername
@@ -145,5 +145,7 @@ module "ecs_web_api" {
   prod_ecs_sg_tags = {
     "Name" = "${local.prod_env}"
   }
-
+  private_zone_name = "coding-game2.internal"
+  vpc_id_route53 = module.network_layer.vpc_id
+  db_records = [module.data_layer.db_instance_address]
 }
